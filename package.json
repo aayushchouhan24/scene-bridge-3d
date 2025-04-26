@@ -1,6 +1,6 @@
 {
   "name": "scene-bridge-3d",
-  "version": "1.0.0-beta0.1 ",
+  "version": "1.0.0-beta0.1",
   "description": "A Three.js Scene extension to sync 3D objects with DOM elements.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
