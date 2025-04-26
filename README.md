@@ -48,7 +48,7 @@ yarn add scene-bridge-3d
 ## 🛠️ Usage
 
 ```javascript
-import { DomScene } from "domscene";
+import Scene from "scene-bridge-3d";
 
 const camera = new THREE.PerspectiveCamera(
   1, // lower fov for less destortion
@@ -58,7 +58,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 0, 1);
 
-const scene = new DomScene(camera);
+const scene = new Scene(camera);
 
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshBasicMaterial();
@@ -79,12 +79,12 @@ animate();
 
 ## 🌐 API
 
-### `DomScene`
+### `Scene`
 
 #### Constructor
 
 ```javascript
-new DomScene(camera);
+new Scene(camera);
 ```
 
 - **camera** (`THREE.PerspectiveCamera`): The camera used to project the 3D scene.
