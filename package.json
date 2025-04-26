@@ -1,0 +1,39 @@
+{
+  "name": "scene-bridge-3d",
+  "version": "1.0.0-beta0.1 ",
+  "description": "A Three.js Scene extension to sync 3D objects with DOM elements.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.176.0",
+    "rollup": "^4.8.0",
+    "rollup-plugin-typescript2": "^0.35.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "typescript": "^5.4.0"
+  },
+  "keywords": [
+    "threejs",
+    "three",
+    "3d",
+    "dom",
+    "sync",
+    "scene",
+    "library"
+  ],
+  "author": "Aayush Chouhan",
+  "license": "MIT"
+}
