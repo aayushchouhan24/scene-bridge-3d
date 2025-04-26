@@ -15,16 +15,14 @@
   "scripts": {
     "build": "rollup -c"
   },
-  "dependencies": {
-    "three": "^0.160.0"
+  "repository": {
+    "type": "git",
+    "url": "https://bit.ly/scene-bridge-3d-git"
   },
-  "devDependencies": {
-    "@types/three": "^0.176.0",
-    "rollup": "^4.8.0",
-    "rollup-plugin-typescript2": "^0.35.0",
-    "@rollup/plugin-node-resolve": "^15.0.0",
-    "typescript": "^5.4.0"
+  "bugs": {
+    "url": "https://bit.ly/scene-bridge-3d-issues"
   },
+  "homepage": "https://bit.ly/scene-bridge-3d-home",
   "keywords": [
     "threejs",
     "three",
@@ -34,6 +32,19 @@
     "scene",
     "library"
   ],
-  "author": "Aayush Chouhan",
-  "license": "MIT"
+  "author": {
+    "name": "Aayush Chouhan",
+    "email": "aayushchouhan24@gmail.com"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.176.0",
+    "rollup": "^4.8.0",
+    "rollup-plugin-typescript2": "^0.35.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "typescript": "^5.4.0"
+  }
 }
