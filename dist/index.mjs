@@ -14,40 +14,26 @@ class DomObject {
     node;
     element;
     camera;
-    viewport = { w: 0, h: 0 };
     center = new THREE.Vector3();
     size = new THREE.Vector3();
     world = new THREE.Vector3();
     dir = new THREE.Vector3();
     ray = new THREE.Ray();
     plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-    viewFac = 1;
     tempV1 = new THREE.Vector3(); // reuse temp vectors
     tempV2 = new THREE.Vector3();
     constructor(node, element, camera) {
         this.node = node;
         this.element = element;
         this.camera = camera;
-        this.resize();
         const wb = new THREE.Box3().setFromObject(node);
         this.center.copy(wb.getCenter(this.tempV1));
         this.size.copy(computeBox(node).getSize(this.tempV2));
-        window.addEventListener("resize", () => this.resize());
-    }
-    resize() {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        this.viewport.w = w;
-        this.viewport.h = h;
-        this.camera.aspect = w / h;
-        this.camera.updateProjectionMatrix();
-        this.viewFac =
-            2 * Math.tan(THREE.MathUtils.DEG2RAD * 0.5 * this.camera.fov);
     }
     update() {
         const r = this.element.getBoundingClientRect();
-        const w = this.viewport.w;
-        const h = this.viewport.h;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
         const ndcX = ((r.left + r.width * 0.5) / w) * 2 - 1;
         const ndcY = (-(r.top + r.height * 0.5) / h) * 2 + 1;
         this.world.set(ndcX, ndcY, 0.5).unproject(this.camera);
@@ -56,7 +42,7 @@ class DomObject {
         this.ray.direction.copy(this.dir);
         this.ray.intersectPlane(this.plane, this.node.position);
         const dist = this.camera.position.distanceTo(this.node.position);
-        const vh = this.viewFac * dist;
+        const vh = 2 * Math.tan(THREE.MathUtils.DEG2RAD * 0.5 * this.camera.fov) * dist;
         const vw = vh * this.camera.aspect;
         const pixelToWorldX = vw / w;
         const pixelToWorldY = vh / h;
@@ -120,4 +106,3 @@ class Scene extends THREE.Scene {
 }
 
 export { Scene as default };
-//# sourceMappingURL=index.mjs.map

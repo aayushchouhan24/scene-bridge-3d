@@ -12,14 +12,12 @@ function computeBox(o: THREE.Object3D) {
 }
 
 export class DomObject {
-  private viewport = { w: 0, h: 0 };
   private center = new THREE.Vector3();
   private size = new THREE.Vector3();
   private world = new THREE.Vector3();
   private dir = new THREE.Vector3();
   private ray = new THREE.Ray();
   private plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-  private viewFac = 1;
 
   private tempV1 = new THREE.Vector3(); // reuse temp vectors
   private tempV2 = new THREE.Vector3();
@@ -29,28 +27,15 @@ export class DomObject {
     private element: Element,
     private camera: THREE.PerspectiveCamera
   ) {
-    this.resize();
     const wb = new THREE.Box3().setFromObject(node);
     this.center.copy(wb.getCenter(this.tempV1));
     this.size.copy(computeBox(node).getSize(this.tempV2));
-    window.addEventListener("resize", () => this.resize());
-  }
-
-  private resize() {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    this.viewport.w = w;
-    this.viewport.h = h;
-    this.camera.aspect = w / h;
-    this.camera.updateProjectionMatrix();
-    this.viewFac =
-      2 * Math.tan(THREE.MathUtils.DEG2RAD * 0.5 * this.camera.fov);
   }
 
   update() {
     const r = this.element.getBoundingClientRect();
-    const w = this.viewport.w;
-    const h = this.viewport.h;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
 
     const ndcX = ((r.left + r.width * 0.5) / w) * 2 - 1;
     const ndcY = (-(r.top + r.height * 0.5) / h) * 2 + 1;
@@ -62,7 +47,7 @@ export class DomObject {
     this.ray.intersectPlane(this.plane, this.node.position);
 
     const dist = this.camera.position.distanceTo(this.node.position);
-    const vh = this.viewFac * dist;
+    const vh = 2 * Math.tan(THREE.MathUtils.DEG2RAD * 0.5 * this.camera.fov) * dist;
     const vw = vh * this.camera.aspect;
 
     const pixelToWorldX = vw / w;
@@ -74,15 +59,15 @@ export class DomObject {
       : 0;
     const rotX = this.element.hasAttribute("data-rot-x")
       ? THREE.MathUtils.DEG2RAD *
-        parseFloat(this.element.getAttribute("data-rot-x") ?? "0")
+      parseFloat(this.element.getAttribute("data-rot-x") ?? "0")
       : 0;
     const rotY = this.element.hasAttribute("data-rot-y")
       ? THREE.MathUtils.DEG2RAD *
-        parseFloat(this.element.getAttribute("data-rot-y") ?? "0")
+      parseFloat(this.element.getAttribute("data-rot-y") ?? "0")
       : 0;
     const rotZ = this.element.hasAttribute("data-rot-z")
       ? THREE.MathUtils.DEG2RAD *
-        parseFloat(this.element.getAttribute("data-rot-z") ?? "0")
+      parseFloat(this.element.getAttribute("data-rot-z") ?? "0")
       : 0;
 
     // Update Z only if attribute is present

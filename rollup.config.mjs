@@ -7,17 +7,31 @@ export default {
     {
       file: 'dist/index.js',
       format: 'cjs',
-      sourcemap: true
     },
     {
       file: 'dist/index.mjs',
       format: 'esm',
-      sourcemap: true
+    },
+    {
+      file: 'dist/index.umd.js',
+      format: 'umd',
+      name: 'SceneBridge3D',
+      globals: {
+        three: 'THREE'
+      },
+      exports: 'default'
     }
   ],
   external: ['three'],
   plugins: [
     nodeResolve(),
-    typescript({ useTsconfigDeclarationDir: true })
+    typescript({
+      useTsconfigDeclarationDir: true,
+      tsconfigOverride: {
+        compilerOptions: {
+          esModuleInterop: true
+        }
+      }
+    })
   ]
 };
