@@ -1,19 +1,20 @@
 {
   "name": "scene-bridge-3d",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Three.js Scene extension to sync 3D objects with DOM elements.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "rollup -c"
+    "build": "tsup",
+    "build:watch": "tsup --watch"
   },
   "repository": {
     "type": "git",
@@ -37,14 +38,19 @@
     "email": "aayushchouhan24@gmail.com"
   },
   "license": "ISC",
-  "dependencies": {
+  "peerDependencies": {
     "three": "^0.160.0"
   },
+  "peerDependenciesMeta": {
+    "three": {
+      "optional": false
+    }
+  },
   "devDependencies": {
-    "@types/three": "^0.176.0",
-    "rollup": "^4.8.0",
-    "rollup-plugin-typescript2": "^0.35.0",
     "@rollup/plugin-node-resolve": "^15.0.0",
+    "@types/three": "^0.176.0",
+    "three": "^0.160.0",
+    "tsup": "^8.4.0",
     "typescript": "^5.4.0"
   }
 }

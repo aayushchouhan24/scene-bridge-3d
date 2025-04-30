@@ -1,14 +1,19 @@
 import * as THREE from "three";
 
-function computeBox(o: THREE.Object3D) {
-  const b = new THREE.Box3();
-  o.traverse((c) => {
-    if ((c as THREE.Mesh).geometry) {
-      (c as THREE.Mesh).geometry.computeBoundingBox();
-      b.expandByObject(c);
+function computeBox(o: THREE.Object3D): THREE.Box3 {
+  let hasMesh = false;
+  const box = new THREE.Box3();
+  
+  o.traverse((child) => {
+    if (child instanceof THREE.Mesh && child.geometry) {
+      hasMesh = true;
+      child.geometry.computeBoundingBox();
     }
   });
-  return b;
+
+  if (hasMesh) box.expandByObject(o);
+  
+  return box;
 }
 
 export class DomObject {
@@ -54,26 +59,13 @@ export class DomObject {
     const pixelToWorldY = vh / h;
 
     // Only update if attribute exists
-    const dz = this.element.hasAttribute("data-z")
-      ? parseFloat(this.element.getAttribute("data-z") ?? "0")
-      : 0;
-    const rotX = this.element.hasAttribute("data-rot-x")
-      ? THREE.MathUtils.DEG2RAD *
-      parseFloat(this.element.getAttribute("data-rot-x") ?? "0")
-      : 0;
-    const rotY = this.element.hasAttribute("data-rot-y")
-      ? THREE.MathUtils.DEG2RAD *
-      parseFloat(this.element.getAttribute("data-rot-y") ?? "0")
-      : 0;
-    const rotZ = this.element.hasAttribute("data-rot-z")
-      ? THREE.MathUtils.DEG2RAD *
-      parseFloat(this.element.getAttribute("data-rot-z") ?? "0")
-      : 0;
+    const dz = this.element.hasAttribute("data-z") ? parseFloat(this.element.getAttribute("data-z") ?? "0") : 0;
+    const rotX = this.element.hasAttribute("data-rot-x") ? THREE.MathUtils.DEG2RAD * parseFloat(this.element.getAttribute("data-rot-x") ?? "0") : 0;
+    const rotY = this.element.hasAttribute("data-rot-y") ? THREE.MathUtils.DEG2RAD * parseFloat(this.element.getAttribute("data-rot-y") ?? "0") : 0;
+    const rotZ = this.element.hasAttribute("data-rot-z") ? THREE.MathUtils.DEG2RAD * parseFloat(this.element.getAttribute("data-rot-z") ?? "0") : 0;
 
     // Update Z only if attribute is present
-    if (this.element.hasAttribute("data-z")) {
-      this.node.position.z += dz * pixelToWorldY; // use vertical scale for Z movement
-    }
+    if (this.element.hasAttribute("data-z")) this.node.position.z += dz * pixelToWorldY;
 
     const sx = (r.width * pixelToWorldX) / this.size.x;
     const sy = (r.height * pixelToWorldY) / this.size.y;
@@ -85,13 +77,8 @@ export class DomObject {
     this.node.position.y -= this.center.y * s;
     this.node.position.z -= this.center.z * s;
 
-    // Update rotation only if attribute is present
-    if (
-      this.element.hasAttribute("data-rot-x") ||
-      this.element.hasAttribute("data-rot-y") ||
-      this.element.hasAttribute("data-rot-z")
-    ) {
+    if (this.element.hasAttribute("data-rot-x") || this.element.hasAttribute("data-rot-y") || this.element.hasAttribute("data-rot-z"))
       this.node.rotation.set(rotX, rotY, rotZ);
-    }
+
   }
 }
